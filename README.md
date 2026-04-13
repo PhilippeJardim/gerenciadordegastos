@@ -54,4 +54,4 @@ ruff check .
 Philippe Santos Lopes Jardim — (https://github.com/PhilippeJardim)
 
 # Repositório
-github.com/seu-usuario/seu-repositorio
+(https://github.com/PhilippeJardim/gerenciadordegastos)
