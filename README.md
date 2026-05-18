@@ -1,6 +1,10 @@
 Controle-se é uma aplicação simples criada para ajudar na organização dos gastos pessoais de pessoas que tem dificuldade em registrar suas despesas.
 A aplicação adiciona, edita e exclui as despesas desejadas pelo cliente. Pode-se listar as despesas registradas na aplicação e usar filtros para selecionar as categorias que deseja ver para poder saber os gastos totais gerais e, também, os gastos de cada categoria.
 
+# Controle-se
+
+Aplicação publicada: (https://philippejardim.github.io/gerenciadordegastos/)
+
 # Tecnologias utilizadas
 Python 3.13;
 
