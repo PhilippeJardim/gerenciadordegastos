@@ -15,6 +15,30 @@
         </div>
     </div>
 
+    <!-- Cotação do dia -->
+    <!-- Card Cotação do Dólar -->
+<div class="col-md-4 mb-3">
+    <div class="card border-0 bg-info text-white">
+        <div class="card-body text-center">
+            <h6 class="card-title">Cotação do dia</h6>
+
+            {% if cotacao_dolar %}
+                <small>Dólar Comercial</small>
+                <h2 class="fw-bold">
+                    R$ {{ cotacao_dolar.valor|floatformat:2 }}
+                </h2>
+                <small>{{ cotacao_dolar.nome }}</small>
+                <br>
+                <small>Atualizado em: {{ cotacao_dolar.data }}</small>
+            {% else %}
+                <p class="mb-0 text-center">
+                    Cotação não disponível.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
     <!-- Resumo por Categoria -->
     <div class="col-md-8 mb-3">
         <div class="card">

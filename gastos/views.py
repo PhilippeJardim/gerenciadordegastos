@@ -17,16 +17,13 @@ def index(request):
 
     despesas = Despesa.objects.all()
 
-    # Filtro por categoria (opcional)
     categoria_filtro = request.GET.get("categoria", "")
 
     if categoria_filtro:
         despesas = despesas.filter(categoria=categoria_filtro)
 
-    # Total geral das despesas
     total = despesas.aggregate(total=Sum("valor"))["total"] or Decimal("0.00")
 
-    # Resumo por categoria
     resumo = []
 
     for cod, nome in CATEGORIAS:
@@ -38,13 +35,11 @@ def index(request):
         if subtotal > 0:
             resumo.append({"nome": nome, "total": subtotal})
 
-    # Tenta buscar a cotação do dólar na API externa
     try:
         cotacao_dolar = buscar_cotacao_dolar()
     except Exception:
         cotacao_dolar = None
 
-    # Dados enviados para o template index.html
     context = {
         "despesas": despesas,
         "total": total,
