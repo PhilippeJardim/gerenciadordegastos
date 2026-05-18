@@ -108,3 +108,17 @@ def excluir(request, pk):
         return redirect("gastos:index")
 
     return render(request, "gastos/confirmar_exclusao.html", {"despesa": despesa})
+
+def entrega_intermediaria(request):
+    """Mostra a página da entrega intermediária com a cotação do dólar."""
+
+    try:
+        cotacao_dolar = buscar_cotacao_dolar()
+    except Exception:
+        cotacao_dolar = None
+
+    context = {
+        "cotacao_dolar": cotacao_dolar,
+    }
+
+    return render(request, "gastos/entrega_intermediaria.html", context)

@@ -582,36 +582,64 @@
             </p>
 
             <div class="row align-items-stretch g-4">
-                <div class="col-lg-7" data-aos="fade-right">
-                    <div class="api-card h-100">
-                        <h3 class="card-title">
-                            <i class="fas fa-money-bill-trend-up"></i> Cotação do dólar
-                        </h3>
-                        <p class="card-description">
-                            Esta área recebe os dados enviados pela view Django através da variável <strong>cotacao_dolar</strong>. Se a API estiver indisponível, a página mostra uma mensagem amigável sem quebrar o sistema.
-                        </p>
 
-                        <div class="currency-box">
-                            {% if cotacao_dolar %}
-                                <span class="status-badge completed">
-                                    <i class="fas fa-circle-check"></i> API carregada com sucesso
-                                </span>
-                                <p class="mt-3 mb-1 text-muted">{{ cotacao_dolar.nome }}</p>
-                                <div class="currency-value">R$ {{ cotacao_dolar.valor }}</div>
-                                <p class="mb-0 text-muted">
-                                    <i class="fas fa-clock"></i> Atualizado em: {{ cotacao_dolar.data }}
-                                </p>
-                            {% else %}
-                                <span class="status-badge in-progress">
-                                    <i class="fas fa-triangle-exclamation"></i> Cotação indisponível
-                                </span>
-                                <p class="mt-3 mb-0 text-muted">
-                                    Não foi possível carregar a cotação do dólar no momento. Tente novamente mais tarde.
-                                </p>
-                            {% endif %}
-                        </div>
+    <div class="col-lg-7" data-aos="fade-right">
+
+        <div class="api-card h-100">
+
+            <h3 class="card-title">
+                <i class="fas fa-money-bill-trend-up"></i>
+                Cotação do dólar
+            </h3>
+
+            <p class="card-description">
+                Esta área recebe os dados enviados pela view Django através da variável
+                <strong>cotacao_dolar</strong>.
+            </p>
+
+            <div class="currency-box">
+
+                {% if cotacao_dolar %}
+
+                    <span class="status-badge completed">
+                        <i class="fas fa-circle-check"></i>
+                        API carregada com sucesso
+                    </span>
+
+                    <p class="mt-3 mb-1 text-white">
+                        {{ cotacao_dolar.nome }}
+                    </p>
+
+                    <div class="currency-value">
+                        R$ {{ cotacao_dolar.valor }}
                     </div>
-                </div>
+
+                    <p class="mb-0 text-white">
+                        <i class="fas fa-clock"></i>
+                        Atualizado em:
+                        {{ cotacao_dolar.data }}
+                    </p>
+
+                {% else %}
+
+                    <span class="status-badge in-progress">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        Cotação indisponível
+                    </span>
+
+                    <p class="mt-3 mb-0 text-white">
+                        Não foi possível carregar a cotação do dólar.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
                 <div class="col-lg-5" data-aos="fade-left">
                     <div class="api-card h-100">
@@ -800,7 +828,7 @@
             </p>
             <div class="code-card" data-aos="fade-up">
 <pre><code>
-    
+
 </code></pre>
             </div>
         </div>
