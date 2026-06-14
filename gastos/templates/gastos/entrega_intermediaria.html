@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entrega intermediária do Gerenciador de Gastos com branch, issue, API pública, teste de integração e deploy.">
+    <title>Entrega Intermediária - Gerenciador de Gastos</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #192087;
+            --primary-dark: #11175f;
+            --primary-light: #4a5cc7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+            --radius: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+            color: var(--text-dark);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 4px 20px rgba(25, 32, 135, 0.18);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.45rem;
+            letter-spacing: 0.4px;
+            color: white !important;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+            color: #fbbf24;
+        }
+
+        .nav-tag {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 82px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 40%, rgba(74, 92, 199, 0.28) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(251, 191, 36, 0.15) 0%, transparent 45%);
+            pointer-events: none;
+        }
+
+        .hero-section > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(2.3rem, 5vw, 3.7rem);
+            font-weight: 850;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.22);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 850px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+
+        .badge-custom {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            padding: 0.7rem 1.5rem;
+            border-radius: 999px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .section-container {
+            padding: 76px 20px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.6rem);
+            font-weight: 850;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.08rem;
+            color: var(--text-muted);
+            max-width: 790px;
+            margin: 0 auto 3rem;
+        }
+
+        .stats-grid,
+        .requirements-grid,
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-item,
+        .deliverable-card,
+        .feature-card,
+        .api-card,
+        .code-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        .stat-item {
+            padding: 2.25rem 1.6rem;
+            text-align: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat-item:hover,
+        .deliverable-card:hover,
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.13);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 850;
+            color: var(--primary);
+            margin-bottom: 0.35rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 650;
+        }
+
+        .api-card {
+            padding: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .api-card::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            right: -70px;
+            top: -90px;
+            background: radial-gradient(circle, rgba(74, 92, 199, 0.16), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .currency-box {
+            background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+            border: 1px solid rgba(16, 185, 129, 0.22);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .currency-value {
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 850;
+            color: var(--primary);
+            margin: 0.25rem 0;
+        }
+
+        .deliverable-card {
+            padding: 2rem;
+            height: 100%;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deliverable-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary));
+        }
+
+        .card-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            margin-bottom: 1.35rem;
+            background: linear-gradient(135deg, #eef2ff, #dbeafe);
+            color: var(--primary);
+        }
+
+        .card-icon.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: var(--success);
+        }
+
+        .card-icon.warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+        }
+
+        .card-icon.info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--info);
+        }
+
+        .card-title,
+        .feature-title,
+        .timeline-title {
+            font-size: 1.22rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description,
+        .feature-description,
+        .timeline-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.48rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.83rem;
+            font-weight: 750;
+            margin-top: 1rem;
+        }
+
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .status-badge.in-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .feature-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 0;
+            margin-right: 52%;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 52%;
+            margin-right: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            border: 4px solid var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(15, 23, 42, 0.06);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-card {
+            padding: 1.25rem;
+        }
+
+        .code-card pre {
+            margin: 0;
+            white-space: pre-wrap;
+            color: #e5e7eb;
+            background: #111827;
+            border-radius: 14px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 60px 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 850;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.08rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .btn-custom {
+            padding: 0.8rem 2.2rem;
+            font-weight: 800;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary-custom {
+            background: white;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            background: #f3f4f6;
+            color: var(--primary);
+        }
+
+        .btn-outline-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline-custom:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h5 {
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #fbbf24;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section a,
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.92rem;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding-top: 1.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tag {
+                display: none;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 82px;
+                margin-right: 0;
+                text-align: left;
+            }
+
+            .timeline-marker {
+                left: 30px;
+            }
+
+            .btn-primary-custom,
+            .btn-outline-custom {
+                display: block;
+                width: 100%;
+                margin: 0 0 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-custom">
+        <div class="container-lg d-flex align-items-center">
+            <span class="navbar-brand">
+                <i class="fas fa-chart-pie"></i>Controle-se
+            </span>
+            <span class="nav-tag ms-auto">
+                <i class="fas fa-code-branch"></i> Branch: entrega-intermediaria
+            </span>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container-lg">
+            <div class="badge-custom" data-aos="fade-up">
+                <i class="fas fa-rocket"></i> Etapa Intermediária
+            </div>
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
+                Evolução do Controle-se
+            </h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+                Implementação profissional com Issue no GitHub, branch própria, integração com API pública, teste de integração, deploy e Pull Request.
+            </p>
+            <div data-aos="fade-up" data-aos-delay="300">
+                <a href="#api" class="btn btn-custom btn-primary-custom">
+                    <i class="fas fa-dollar-sign"></i> Ver API integrada
+                </a>
+                <a href="#passos" class="btn btn-custom btn-outline-custom">
+                    <i class="fas fa-list-check"></i> Ver passos da entrega
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <div class="container-lg">
+            <div class="stats-grid">
+                <div class="stat-item" data-aos="fade-up">
+                    <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Requisitos da etapa</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-code-branch" style="font-size: 2rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Branch de desenvolvimento</div>
+                </div>
+                <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-cloud" style="font-size: 2rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Fluxo rastreável</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="api" class="section-container" style="background: white;">
+        <div class="container-lg">
+            <h2 class="section-title text-center" data-aos="fade-up">
+                <i class="fas fa-plug"></i> Integração com API Pública
+            </h2>
+            <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100">
+                A aplicação passa a consumir uma API externa para exibir a cotação atual do dólar em real, agregando valor financeiro ao controle de gastos.
+            </p>
+
+            <div class="row align-items-stretch g-4">
+
+    <div class="col-lg-7" data-aos="fade-right">
+
+        <div class="api-card h-100">
+
+            <h3 class="card-title">
+                <i class="fas fa-money-bill-trend-up"></i>
+                Cotação do dólar
+            </h3>
+
+            <p class="card-description">
+                Esta área recebe os dados enviados pela view Django através da variável
+                <strong>cotacao_dolar</strong>.
+            </p>
+
+            <div class="currency-box">
+
+                {% if cotacao_dolar %}
+
+                    <span class="status-badge completed">
+                        <i class="fas fa-circle-check"></i>
+                        API carregada com sucesso
+                    </span>
+
+                    <p class="mt-3 mb-1 text-white">
+                        {{ cotacao_dolar.nome }}
+                    </p>
+
+                    <div class="currency-value">
+                        R$ {{ cotacao_dolar.valor }}
+                    </div>
+
+                    <p class="mb-0 text-white">
+                        <i class="fas fa-clock"></i>
+                        Atualizado em:
+                        {{ cotacao_dolar.data }}
+                    </p>
+
+                {% else %}
+
+                    <span class="status-badge in-progress">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        Cotação indisponível
+                    </span>
+
+                    <p class="mt-3 mb-0 text-white">
+                        Não foi possível carregar a cotação do dólar.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+                <div class="col-lg-5" data-aos="fade-left">
+                    <div class="api-card h-100">
+                        <h3 class="card-title">
+                            <i class="fas fa-circle-info"></i> API escolhida
+                        </h3>
+                        <p class="card-description">
+                            <strong>AwesomeAPI Economia</strong><br>
+                            Endpoint utilizado: <code>USD-BRL</code><br>
+                            Método: <code>HTTP GET</code><br>
+                            Finalidade: consultar a cotação do dólar em real.
+                        </p>
+                        <div class="status-badge completed">
+                            <i class="fas fa-check"></i> Integração externa implementada
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="passos" class="section-container">
+        <div class="container-lg">
+            <h2 class="section-title text-center" data-aos="fade-up">
+                <i class="fas fa-box-open"></i> Requisitos atendidos
+            </h2>
+            <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100">
+                A página agora documenta tudo que foi solicitado para a etapa intermediária.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up">
+                    <div class="deliverable-card">
+                        <div class="card-icon success"><i class="fab fa-github"></i></div>
+                        <h3 class="card-title">Issue no GitHub</h3>
+                        <p class="card-description">Demanda documentada explicando a integração com a API de cotação e o valor para o usuário.</p>
+                        <div class="status-badge completed">Documentado</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="deliverable-card">
+                        <div class="card-icon info"><i class="fas fa-code-branch"></i></div>
+                        <h3 class="card-title">Branch separada</h3>
+                        <p class="card-description">Desenvolvimento feito fora da branch principal, usando obrigatoriamente a branch <strong>entrega-intermediaria</strong>.</p>
+                        <div class="status-badge completed">Branch criada</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="deliverable-card">
+                        <div class="card-icon success"><i class="fas fa-plug"></i></div>
+                        <h3 class="card-title">API pública</h3>
+                        <p class="card-description">Consumo de serviço externo aberto para trazer a cotação do dólar para dentro da interface.</p>
+                        <div class="status-badge completed">API integrada</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="deliverable-card">
+                        <div class="card-icon success"><i class="fas fa-vial"></i></div>
+                        <h3 class="card-title">Teste de integração</h3>
+                        <p class="card-description">Teste com mock da resposta da API, validando se o fluxo externo retorna nome, valor e data corretamente.</p>
+                        <div class="status-badge completed">Teste criado</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="deliverable-card">
+                        <div class="card-icon warning"><i class="fas fa-cloud-arrow-up"></i></div>
+                        <h3 class="card-title">Deploy</h3>
+                        <p class="card-description">Aplicação preparada para publicação em plataforma como Render, Vercel, Netlify ou GitHub Pages.</p>
+                        <div class="status-badge in-progress">Publicação online</div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="deliverable-card">
+                        <div class="card-icon info"><i class="fas fa-code-pull-request"></i></div>
+                        <h3 class="card-title">Pull Request e Merge</h3>
+                        <p class="card-description">A entrega deve ser enviada por PR para a branch principal usando <strong>Closes #número-da-issue</strong>.</p>
+                        <div class="status-badge completed">Fluxo rastreável</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container" style="background: white;">
+        <div class="container-lg">
+            <h2 class="section-title text-center" data-aos="fade-up">
+                <i class="fas fa-star"></i> Funcionalidades da aplicação
+            </h2>
+            <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100">
+                O Gerenciador de Gastos permite controlar despesas, visualizar totais, filtrar categorias e agora acompanhar dados financeiros externos.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card" data-aos="zoom-in">
+                    <div class="feature-icon"><i class="fas fa-plus-circle"></i></div>
+                    <h3 class="feature-title">Adicionar despesas</h3>
+                    <p class="feature-description">Registro de novos gastos com data, valor, descrição e categoria.</p>
+                </div>
+                <div class="feature-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-list"></i></div>
+                    <h3 class="feature-title">Listar despesas</h3>
+                    <p class="feature-description">Visualização organizada das despesas cadastradas na aplicação.</p>
+                </div>
+                <div class="feature-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-filter"></i></div>
+                    <h3 class="feature-title">Filtrar por categoria</h3>
+                    <p class="feature-description">Consulta rápida de despesas por alimentação, transporte, lazer e outras categorias.</p>
+                </div>
+                <div class="feature-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-edit"></i></div>
+                    <h3 class="feature-title">Editar despesas</h3>
+                    <p class="feature-description">Atualização dos dados de uma despesa já cadastrada.</p>
+                </div>
+                <div class="feature-card" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fas fa-trash"></i></div>
+                    <h3 class="feature-title">Excluir despesas</h3>
+                    <p class="feature-description">Remoção de registros com confirmação de segurança.</p>
+                </div>
+                <div class="feature-card" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <h3 class="feature-title">Cotação externa</h3>
+                    <p class="feature-description">Consulta de dados reais da internet usando API pública de economia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <div class="container-lg">
+            <h2 class="section-title text-center" data-aos="fade-up">
+                <i class="fas fa-timeline"></i> Roadmap da entrega
+            </h2>
+            <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100">
+                Sequência recomendada para concluir e apresentar a etapa intermediária.
+            </p>
+
+            <div class="timeline" data-aos="fade-up">
+                <div class="timeline-item">
+                    <div class="timeline-marker"><i class="fas fa-1"></i></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Passo 1</div>
+                        <h3 class="timeline-title">Abrir Issue</h3>
+                        <p class="timeline-description">Registrar no GitHub a demanda de integração da API de cotação do dólar.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"><i class="fas fa-2"></i></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Passo 2</div>
+                        <h3 class="timeline-title">Criar branch</h3>
+                        <p class="timeline-description">Criar e trabalhar na branch <strong>entrega-intermediaria</strong>, sem alterar diretamente a main.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"><i class="fas fa-3"></i></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Passo 3</div>
+                        <h3 class="timeline-title">Programar API e teste</h3>
+                        <p class="timeline-description">Criar o serviço em Python, mostrar os dados no template e validar com pytest.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"><i class="fas fa-4"></i></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Passo 4</div>
+                        <h3 class="timeline-title">Deploy e PR</h3>
+                        <p class="timeline-description">Publicar a aplicação, atualizar o README com o link e abrir Pull Request fechando a Issue.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container" style="background: white;">
+        <div class="container-lg">
+            <h2 class="section-title text-center" data-aos="fade-up">
+                <i class="fas fa-terminal"></i> Comandos principais
+            </h2>
+            <p class="section-subtitle text-center" data-aos="fade-up" data-aos-delay="100">
+                Use estes comandos no terminal do VS Code para registrar e enviar a entrega.
+            </p>
+            <div class="code-card" data-aos="fade-up">
+<pre><code>
+
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <div class="container-lg">
+            <div class="cta-section" data-aos="fade-up">
+                <h2 class="cta-title">Entrega pronta para validação</h2>
+                <p class="cta-subtitle">Depois do push, abra o Pull Request no GitHub usando a descrição com <strong>Closes #número-da-issue</strong>.</p>
+                <a href="/" class="btn btn-custom btn-primary-custom">
+                    <i class="fas fa-arrow-right"></i> Ir para a aplicação
+                </a>
+                <a href="https://github.com/PhilippeJardim/gerenciadordegastos" class="btn btn-custom btn-outline-custom" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-github"></i> Ver repositório
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container-lg">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-info-circle"></i> Sobre</h5>
+                    <p>Projeto acadêmico de Gerenciador de Gastos com foco em evolução contínua, rastreabilidade e integração externa.</p>
+                </div>
+                <div class="footer-section">
+                    <h5><i class="fas fa-link"></i> Links úteis</h5>
+                    <ul>
+                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="/gastos/"><i class="fas fa-list"></i> Despesas</a></li>
+                        <li><a href="https://github.com/PhilippeJardim/gerenciadordegastos" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h5><i class="fas fa-code"></i> Tecnologias</h5>
+                    <ul>
+                        <li>Django</li>
+                        <li>Python</li>
+                        <li>Bootstrap 5</li>
+                        <li>pytest</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p style="margin: 0; color: rgba(255, 255, 255, 0.72);">
+                    <i class="fas fa-copyright"></i> 2026 Gerenciador de Gastos - Entrega Intermediária.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: "ease-in-out",
+            once: true,
+            offset: 90
+        });
+    </script>
+</body>
+</html>
