@@ -24,7 +24,7 @@ O **Controle-se** é uma aplicação web desenvolvida em Django projetada para f
 *   **Backend:** Python 3.13.x / Django 4.2.x
 *   **Banco de Dados:**
     *   **Desenvolvimento/Testes:** SQLite (Local)
-    *   **Produção (Nuvem):** PostgreSQL (Neon / Supabase)
+    *   **Produção (Nuvem):** PostgreSQL (Supabase)
 *   **Servidor de Arquivos Estáticos:** WhiteNoise (otimização e cache de arquivos estáticos em produção)
 *   **Qualidade e Estilo de Código:** Ruff (linter rápido)
 *   **Testes Automatizados:** Pytest / pytest-django
