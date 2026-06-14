@@ -1,6 +1,8 @@
 import pytest
 from django.utils import timezone
+
 from gastos.models import Despesa
+
 
 @pytest.mark.django_db
 def test_criar_despesa():

@@ -1,6 +1,7 @@
 import django
 from django.conf import settings
 
+
 def pytest_configure(config):
     """Configura o ambiente Django para os testes"""
     settings.configure(

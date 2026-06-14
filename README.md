@@ -6,7 +6,7 @@ O **Controle-se** é uma aplicação web desenvolvida em Django projetada para f
 
 ## 🚀 Links do Projeto
 
-*   **Repositório Oficial:** [GitHub - gerenciador-de-gastos](https://github.com/PhilippeJardim/gerenciador-de-gastos)
+*   **Repositório Oficial:** [GitHub - gerenciadordegastos](https://github.com/PhilippeJardim/gerenciadordegastos)
 *   **Aplicação Publicada (Deploy):** *[Adicione aqui o Link de Produção (ex: Render, PythonAnywhere, etc.)]*
 
 ---
@@ -15,11 +15,7 @@ O **Controle-se** é uma aplicação web desenvolvida em Django projetada para f
 
 | Nome Completo | Matrícula | GitHub |
 | :--- | :--- | :--- |
-| Philippe Santos Lopes Jardim | *[Sua Matrícula]* | [@PhilippeJardim](https://github.com/PhilippeJardim) |
-| *[Integrante 2]* | *[Matrícula]* | *[@usuario]* |
-| *[Integrante 3]* | *[Matrícula]* | *[@usuario]* |
-| *[Integrante 4]* | *[Matrícula]* | *[@usuario]* |
-| *[Integrante 5]* | *[Matrícula]* | *[@usuario]* |
+| Philippe Santos Lopes Jardim | 22452544 | [@PhilippeJardim](https://github.com/PhilippeJardim) |
 
 ---
 
@@ -40,8 +36,8 @@ O **Controle-se** é uma aplicação web desenvolvida em Django projetada para f
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/PhilippeJardim/gerenciador-de-gastos.git
-cd gerenciador-de-gastos
+git clone https://github.com/PhilippeJardim/gerenciadordegastos.git
+cd gerenciadordegastos
 ```
 
 ### 2. Configurar o Ambiente Virtual (venv)

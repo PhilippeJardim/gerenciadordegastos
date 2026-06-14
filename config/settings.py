@@ -1,15 +1,13 @@
-"""
-Configurações do Django para o Gerenciador de Gastos Pessoais.
-"""
+"""Configurações do Django para o Gerenciador de Gastos Pessoais."""
 
 import os
 from pathlib import Path
+
 import dj_database_url
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Carrega as variáveis de ambiente do arquivo .env
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get(
@@ -19,7 +17,15 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1 .onrender.com").split()
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost 127.0.0.1 .onrender.com",
+).split()
+
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS",
+    "",
+).split()
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -87,3 +93,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
