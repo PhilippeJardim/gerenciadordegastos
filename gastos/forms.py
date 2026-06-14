@@ -20,6 +20,7 @@ class DespesaForm(forms.ModelForm):
             ),
             "categoria": forms.Select(attrs={"class": "form-select"}),
             "data": forms.DateInput(
+                format="%Y-%m-%d",
                 attrs={"class": "form-control", "type": "date"}
             ),
         }
