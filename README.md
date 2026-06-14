@@ -7,7 +7,7 @@ O **Controle-se** é uma aplicação web desenvolvida em Django projetada para f
 ## 🚀 Links do Projeto
 
 *   **Repositório Oficial:** [GitHub - gerenciadordegastos](https://github.com/PhilippeJardim/gerenciadordegastos)
-*   **Aplicação Publicada (Deploy):** *[Adicione aqui o Link de Produção (ex: Render, PythonAnywhere, etc.)]*
+*   **Aplicação Publicada (Deploy):** [Controle-se no Render](https://controle-se-ypee.onrender.com/)
 
 ---
 
